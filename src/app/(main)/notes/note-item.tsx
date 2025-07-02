@@ -1,20 +1,30 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { NotePreviewDialog } from "./note-preview-dialog";
+import { Doc } from "../../../../convex/_generated/dataModel";
 
-export function NoteItem() {
+type NoteItemProps = {
+  note: Doc<"notes">;
+};
+
+export function NoteItem({ note }: NoteItemProps) {
+  function handleOpenNote() {
+    window.history.pushState(null, "", `?noteId=${note._id}`);
+  }
   return (
     <>
-      <Card className="cursor-pointer hover:shadow-md transition-shadow">
+      <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleOpenNote}>
         <CardHeader>
-          <CardTitle>Note Title</CardTitle>
+          <CardTitle>{note.title}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="line-clamp-3 text-sm text-muted-foreground whitespace-pre-line">
-            Note Body
+            {note.body}
           </div>
         </CardContent>
       </Card>
+      <NotePreviewDialog note={note} />
     </>
   );
 }
